@@ -1,0 +1,1 @@
+nohup java -jar PerformNetverifyTest.jar secret=aIQnab5WBNYVdfffgOHRNEKC3ofVqwuZ| tee Output.txt
