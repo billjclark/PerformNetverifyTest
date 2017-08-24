@@ -207,7 +207,7 @@ public class PerformNetverifyGuid {
 								conn.disconnect();
 			            	
 						}
-			            System.out.println("\nTotal Submitted: " + counter);
+			            System.out.println("\n\nTotal Submitted: " + counter);
 			            
 					}
 					catch(MalformedURLException muexc) {
