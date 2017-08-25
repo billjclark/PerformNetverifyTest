@@ -28,7 +28,8 @@ public class PerformNetverifyTest {
 	private static final String PATH_TO_IMAGE_FOLDER_ = "pathToImageFolder=";
 	private static final String SERVER_URL_ = "serverUrl=";
 	private static final String API_SECRET_ = "secret=";
-		
+	private static final String API_TOKEN_ = "token=";
+
 	private static final String USER_AGENT_TXT = "Jumio NV Test Tool/v1.0";
 	private static final String PATH_TO_IMAGE_FOLDER = "pathToImageFolder";
 	private static final String SERVER_URL = "serverUrl";
@@ -94,22 +95,13 @@ public class PerformNetverifyTest {
 				else if(args[i].contains(API_SECRET_)) {
 					secret = args[i].replace(API_SECRET_, "");
 				}
+				else if(args[i].contains(API_TOKEN_)) {
+					token = args[i].replace(API_TOKEN_, "");
+				}
 			}
 			File imageFolder = new File(pathToImageFolder);
 			
-			/*
-	         FileFilter filter = new FileFilter() {
-	             @Override
-	             public boolean accept(File pathname) {
-	                return pathname.isFile();
-	             }
-	          };
 
-			if (requiresFace && imageFolder.listFiles()) {
-				
-			}
-			*/
-			
 			if(secret != null && !secret.equals("")) {
 				ArrayList<String> imagesArray = getAllIdImagesFromDirectory(imageFolder);
 				if(imagesArray != null && imagesArray.size() > 0) {

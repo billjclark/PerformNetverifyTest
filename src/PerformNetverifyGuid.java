@@ -36,6 +36,7 @@ public class PerformNetverifyGuid {
 	private static final String PATH_TO_IMAGE_FOLDER_ = "pathToImageFolder=";
 	private static final String SERVER_URL_ = "serverUrl=";
 	private static final String API_SECRET_ = "secret=";
+	private static final String API_TOKEN_ = "token=";
 		
 	private static final String USER_AGENT_TXT = "Jumio NV Test Tool/v1.0";
 	private static final String PATH_TO_IMAGE_FOLDER = "pathToImageFolder";
@@ -103,6 +104,9 @@ public class PerformNetverifyGuid {
 				else if(args[i].contains(API_SECRET_)) {
 					secret = args[i].replace(API_SECRET_, "");
 				}
+				else if(args[i].contains(API_TOKEN_)) {
+					token = args[i].replace(API_TOKEN_, "");
+				}
 			}
 			File imageFolder = new File(pathToImageFolder);
 			
@@ -127,7 +131,7 @@ public class PerformNetverifyGuid {
 
 			            		
 				            	idPath = Paths.get(str);
-				            	ArrayList<String> verArray = getVerificationImages(imageFolder, idPath.getFileName().toString());
+				            	
 				            	
 				            	conn = (HttpURLConnection) url.openConnection();
 								conn.setDoOutput(true);
@@ -160,22 +164,28 @@ public class PerformNetverifyGuid {
 							            }
 							            String backImg = Base64.getEncoder().encodeToString(Files.readAllBytes(backPath));
 							            jsonObject.addProperty(BACK_IMAGE, backImg);
+						            } else {
+						            	jsonObject.addProperty(BACK_IMAGE, idImg);
 						            }
 						            // Add face image
-						            if (requiresFace && verArray.size() > 0 ) {
-						            	imgPath = Paths.get(verArray.get(0));
-							            if (!imgPath.toFile().exists() && requiresFace) {
+						            if (requiresFace) {
+						            	ArrayList<String> verArray = getVerificationImages(imageFolder, idPath.getFileName().toString());
+						            	if (verArray == null) {
 							            	System.out.println( FACE_MISSING + idPath.getFileName().toString() + FILE_NOT_PROCESSED);
 							            	continue;
 							            }
+						            	imgPath = Paths.get(verArray.get(0));
+							            
 							            String faceImg = Base64.getEncoder().encodeToString(Files.readAllBytes(imgPath));
 							            jsonObject.addProperty(FACE_IMAGE, faceImg);
+						            } else {
+						            	jsonObject.addProperty(FACE_IMAGE, idImg);
 						            }
 						            // Finished building jsonObject; Send to server
 						            wr = new OutputStreamWriter(conn.getOutputStream());
 						            wr.write(jsonObject.toString());
 						            wr.flush();
-									//System.out.println(jsonObject.toString());
+									// System.out.println(jsonObject.toString());
 						
 									String streamToString = convertStreamToString(conn.getInputStream());
 									try {
@@ -201,6 +211,7 @@ public class PerformNetverifyGuid {
 								conn.disconnect();
 			            	
 						}
+			            System.out.println("\n\nTotal Submitted: " + counter);
 			            
 					}
 					catch(MalformedURLException muexc) {
