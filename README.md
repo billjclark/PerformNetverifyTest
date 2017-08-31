@@ -21,10 +21,12 @@ pathToImageFolder |yes	|yes	|nil
 nabledFields	|yes	|no	|“idNumber,idFirstName,idLastName,idDob,idExpiry,idUsState,idPersonalNumber,idAddress"
 serverUrl	|yes	|yes	|https://netverify.com/api/netverify/v2
 merchantReportingCriteria	|yes	|no	|“Jumio NV Test Tool”
-faceImageRequired=true
-backImageRequired=false
-backSuffix=_back
-faceSuffix=_face
+faceImageRequired |yes |no  |true
+backImageRequired |yes |no  |false
+backSuffix |yes |no  |_back
+faceSuffix |yes |no  |_face
+token |no |yes  |null
+secret  |no |yes  |null
 
 # Running the tool
 
