@@ -187,7 +187,8 @@ public class PerformNetverifyTest {
 								}
 								counter++;
 								conn.disconnect();
-			            	}
+								System.out.println("\n\nTotal Submitted: " + counter);
+							}
 			            	else {
 			            		//System.out.println(MSG_LIMIT);
 			            		break;
