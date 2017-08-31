@@ -18,7 +18,7 @@ When parameter value is specified both in config file and the command line, the 
 Name|config.properties|command-line arg|default
 ---|---|---|---
 pathToImageFolder |yes	|yes	|nil
-nabledFields	|yes	|no	|“idNumber,idFirstName,idLastName,idDob,idExpiry,idUsState,idPersonalNumber,idAddress"
+enabledFields	|yes	|no	|“idNumber,idFirstName,idLastName,idDob,idExpiry,idUsState,idPersonalNumber,idAddress"
 serverUrl	|yes	|yes	|https://netverify.com/api/netverify/v2
 merchantReportingCriteria	|yes	|no	|“Jumio NV Test Tool”
 faceImageRequired |yes |no  |true
