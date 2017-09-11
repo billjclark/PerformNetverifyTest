@@ -30,6 +30,8 @@ secret  |no |yes  |null
 
 # Running the tool
 
+This program only requires a relatively recent version of Java to be installed.
+
 Example:
 
 ```
