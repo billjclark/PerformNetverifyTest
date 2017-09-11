@@ -30,7 +30,7 @@ secret  |no |yes  |null
 
 # Running the tool
 
-This program only requires a relatively recent version of Java to be installed.
+This program only requires a relatively recent version of Java to be installed.  The program is easy to run in IntelliJ (Android Studio) or Elipse but an IDE is not required.
 
 Example:
 
