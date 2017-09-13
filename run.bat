@@ -1,1 +1,1 @@
-java -jar PerformNetverifyTest.jar secret=aIQnab5WBNYVdfffgOHRNEKC3ofVqwuZ
+java -cp PerformNetverifyTest.jar PerformNetverifyGuid secret=bNm76uFEg0sPiyJ1IcujZquoISRWALhI token=f5301330-a779-4cfc-94e6-d65791864d5b

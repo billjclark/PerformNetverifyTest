@@ -23,7 +23,7 @@ import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 
 /**
- * PerformNetverifyGUID handles the usecase where the files are composed of two GUIDs - One for the verification and one for the image.
+ * PerformNetverifyGUID handles the usecase where the file names are composed of two GUIDs - One for the verification and one for the image.
  * 
  * 
  * @author bclark
@@ -164,8 +164,6 @@ public class PerformNetverifyGuid {
 							            }
 							            String backImg = Base64.getEncoder().encodeToString(Files.readAllBytes(backPath));
 							            jsonObject.addProperty(BACK_IMAGE, backImg);
-						            } else {
-						            	jsonObject.addProperty(BACK_IMAGE, idImg);
 						            }
 						            // Add face image
 						            if (requiresFace) {
@@ -193,7 +191,7 @@ public class PerformNetverifyGuid {
 										JsonObject jsonObj = (JsonObject)parser.parse(streamToString);
 										
 										if(jsonObj.get(JUMIO_ID_SCAN_REFERENCE) != null) {
-											System.out.println(idPath.getFileName().toString() + ": " + SUCCESSFULLY);
+											System.out.println(idPath.getFileName().toString() + ": " + SUCCESSFULLY + " Reference: " + jsonObj.get(JUMIO_ID_SCAN_REFERENCE));
 										}
 										else {
 											System.out.println(idPath.getFileName().toString() + ": " + jsonObj.toString());
