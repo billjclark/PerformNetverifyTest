@@ -47,7 +47,7 @@ nohup java -cp PerformNetverifyTest.jar PerformNetverifyGuid secret=***** token=
 
 # Running Large Number of Scans
 
-If you are going to post a large number of transactions, you need to be more organized.  You potentially could submit the same number 
+If you are going to post a large number of transactions, you need to be more organized.  You potentially could submit the same images multiple times and double bill the customer. 
 
 Initial Setup Steps:
 
