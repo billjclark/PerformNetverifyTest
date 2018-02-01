@@ -2,6 +2,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -141,26 +142,30 @@ public class PerformNetverifyTest {
 									String idImg = Base64.getEncoder().encodeToString(data);									
 						            jsonObject.addProperty(FRONTSIDE_IMAGE, idImg);
 						            // Add back image
-						            String idFilename = idPath.getFileName().toString();
-						            String backFilename = idFilename.substring(0, idFilename.lastIndexOf(".") - 5) + backSuffix + idFilename.substring(idFilename.lastIndexOf("."));
-						            backPath = Paths.get(idPath.getParent().toString() + idPath.getFileSystem().getSeparator() + backFilename);
-						            if (!backPath.toFile().exists() && requiresBack) {
-						            	System.out.println( BACK_MISSING + idPath.getFileName().toString() + FILE_NOT_PROCESSED);
-						            	continue;
-						            }
-						            String backImg = Base64.getEncoder().encodeToString(Files.readAllBytes(backPath));
-						            jsonObject.addProperty(BACK_IMAGE, backImg);
-						            // Add face image
-						            String imgFilename = idFilename.substring(0, idFilename.lastIndexOf(".") - 5) + faceSuffix + idFilename.substring(idFilename.lastIndexOf("."));
-						            imgPath = Paths.get(idPath.getParent().toString() + idPath.getFileSystem().getSeparator() + imgFilename);
-						            if (!imgPath.toFile().exists() && requiresFace) {
-						            	System.out.println( FACE_MISSING + idPath.getFileName().toString() + FILE_NOT_PROCESSED);
-						            	continue;
-						            }
-						            String faceImg = Base64.getEncoder().encodeToString(Files.readAllBytes(imgPath));
-						            jsonObject.addProperty(FACE_IMAGE, faceImg);
-						            // Finished building jsonObject; Send to server
-						            wr = new OutputStreamWriter(conn.getOutputStream());
+									String idFilename = idPath.getFileName().toString();
+									if (requiresBack) {
+										String backFilename = idFilename.substring(0, idFilename.lastIndexOf(".") - 5) + backSuffix + idFilename.substring(idFilename.lastIndexOf("."));
+										backPath = Paths.get(idPath.getParent().toString() + idPath.getFileSystem().getSeparator() + backFilename);
+										if (!backPath.toFile().exists() && requiresBack) {
+											System.out.println(BACK_MISSING + idPath.getFileName().toString() + FILE_NOT_PROCESSED);
+											continue;
+										}
+										String backImg = Base64.getEncoder().encodeToString(Files.readAllBytes(backPath));
+										jsonObject.addProperty(BACK_IMAGE, backImg);
+									}
+									// Add face image
+									if (requiresFace) {
+										String imgFilename = idFilename.substring(0, idFilename.lastIndexOf(".") - 5) + faceSuffix + idFilename.substring(idFilename.lastIndexOf("."));
+										imgPath = Paths.get(idPath.getParent().toString() + idPath.getFileSystem().getSeparator() + imgFilename);
+										if (!imgPath.toFile().exists()) {
+											System.out.println(FACE_MISSING + idPath.getFileName().toString() + FILE_NOT_PROCESSED);
+											continue;
+										}
+										String faceImg = Base64.getEncoder().encodeToString(Files.readAllBytes(imgPath));
+										jsonObject.addProperty(FACE_IMAGE, faceImg);
+									}
+									// Finished building jsonObject; Send to server
+									wr = new OutputStreamWriter(conn.getOutputStream());
 						            wr.write(jsonObject.toString());
 						            wr.flush();
 									//System.out.println(jsonObject.toString());
@@ -230,28 +235,33 @@ public class PerformNetverifyTest {
 	 */
 	private static ArrayList<String> getAllIdImagesFromDirectory(File directory) {
         ArrayList<String> resultList = new ArrayList<String>(1);
-        File[] f = directory.listFiles();
-        if(f != null) {
-	        for (File file : f) {
-	            if (file != null && (file.getName().toLowerCase().endsWith(frontSuffix + ".jpg") || file.getName().toLowerCase().endsWith(frontSuffix + ".png")) 
-	            		)  {
-	                try {
-						resultList.add(file.getCanonicalPath());
-					} 
-	                catch (IOException e) {
-						System.out.println(e.getMessage());
-					}
-	            }
-	        }
-        }
-        else {
-        	System.out.println(directory.getName() + ": " + NOT_EXISTING);
-        	return null;
-        }
-        
-        if (resultList.size() > 0) {
-        	if(resultList.size() > 100) {
-        		System.out.println(MSG_LIMIT);
+		FilenameFilter idFilter = new FilenameFilter() {
+			public boolean accept(File dir, String name) {
+				if (name.toLowerCase().contains(frontSuffix) && name.endsWith("pdf") == false) {
+					return true;
+				} else {
+					return false;
+				}
+			}
+		};
+		File[] f = directory.listFiles(idFilter);
+		if (f != null) {
+
+			for (File file : f) {
+				try {
+					resultList.add(file.getCanonicalPath());
+				} catch (IOException e) {
+					System.out.println(e.getMessage());
+				}
+			}
+		} else {
+			System.out.println(directory.getName() + ": " + NOT_EXISTING);
+			return null;
+		}
+
+		if (resultList.size() > 0) {
+			if (resultList.size() > 100) {
+				System.out.println(MSG_LIMIT);
         	}
             return resultList;
         }
@@ -260,7 +270,7 @@ public class PerformNetverifyTest {
             return null;
         }
     }
-	
+
 	private static String convertStreamToString(InputStream is) {
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
