@@ -240,8 +240,7 @@ public class PerformNetverifyTest {
 				if (name.toLowerCase().contains(frontSuffix) && name.endsWith("pdf") == false) {
 					return true;
 				} else {
-					return false;
-				}
+					return false;				}
 			}
 		};
 		File[] f = directory.listFiles(idFilter);
